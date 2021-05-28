@@ -51,7 +51,7 @@ public class ObstacleGenerator : MonoBehaviour
 
     private void DisposePassedObstacles(GameObject obstacle)
     {
-        Destroy(obstacle);
+        Destroy(obstacle, 2f);
     }
 
     private void GenerateObstacle(float previous_obstacle_xpos)

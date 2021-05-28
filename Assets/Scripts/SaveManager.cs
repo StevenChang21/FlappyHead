@@ -1,34 +1,66 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public class SaveManager : MonoBehaviour
 {
-    GameManager manager;
+    private static string _savePath => Application.persistentDataPath + "/Saves.txt";
 
-    void Start()
+    public static void Save()
     {
-        manager = FindObjectOfType<GameManager>();
+        var state = LoadFile();
+        CaptureState(state);
+        SaveFile(state);
     }
 
-    public void OnClickSave()
+    public static void Load()
     {
-        BinaryFormatter binaryFormatter = new BinaryFormatter();
-        var path = Application.persistentDataPath + "/Kalapucjj.virus";
-        FileStream stream = new FileStream(path, FileMode.Create);
-        binaryFormatter.Serialize(stream, manager.HighestScore);
-        stream.Close();
+        var state = LoadFile();
+        RestoreState(state);
     }
 
-    public void OnLoadHighScore()
+    private static void SaveFile(object state)
     {
-        var path = Application.persistentDataPath + "/Kalapucjj.virus";
-        if (File.Exists(path))
+        using (var stream = File.Open(_savePath, FileMode.Create))
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            var stream = new FileStream(path, FileMode.Open);
-            manager.HighestScore = (int)formatter.Deserialize(stream);
-            stream.Close();
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(stream, state);
+        }
+    }
+
+    private static Dictionary<string, object> LoadFile()
+    {
+        if (!File.Exists(_savePath))
+        {
+            Debug.Log("File not existed");
+            return new Dictionary<string, object>();
+        }
+
+        using (FileStream stream = File.Open(_savePath, FileMode.Open))
+        {
+            var formatter = new BinaryFormatter();
+            return (Dictionary<string, object>)formatter.Deserialize(stream);
+        }
+    }
+
+    private static void RestoreState(Dictionary<string, object> state)
+    {
+        foreach (var saveable in FindObjectsOfType<SaveableEntity>())
+        {
+            if (state.TryGetValue(saveable.Id, out object value))
+            {
+                saveable.RestoreState(value);
+            }
+        }
+    }
+
+    private static void CaptureState(Dictionary<string, object> state)
+    {
+        var all_saveable_entity = FindObjectsOfType<SaveableEntity>();
+        foreach (var saveable in all_saveable_entity)
+        {
+            state[saveable.Id] = saveable.CaptureState();
         }
     }
 }
