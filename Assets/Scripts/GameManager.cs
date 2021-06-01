@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameObject _GameOverUI;
     public static int HighScore;
 
     void Awake()
@@ -9,8 +10,14 @@ public class GameManager : MonoBehaviour
         SaveManager.Load();
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         SaveManager.Save();
+        Debug.Log("Saved!");
+    }
+
+    private void OnPlayerDied()
+    {
+        _GameOverUI.SetActive(true);
     }
 }

@@ -1,32 +1,25 @@
 using UnityEngine;
 using TMPro;
 
-public class ScoreDisplay : MonoBehaviour, ISaveable
+public class ScoreDisplay : MonoBehaviour
 {
+    [SerializeField] private VoidEvent _ListenerOnPlayerDied;
+    [SerializeField] private IntVariable _PlayerScore;
     [SerializeField] TextMeshProUGUI _scoreLabel;
-    [SerializeField] Player _player;
-    private int _HighScore;
+
+    void Start()
+    {
+        _ListenerOnPlayerDied.Event.AddListener(OnPlayerDied);
+    }
 
     void Update()
     {
-        if (_player.IsDead) { enabled = false; }
-        _scoreLabel.text = _player.Score.ToString();
+        _scoreLabel.text = _PlayerScore.Value.ToString();
     }
 
-    public object CaptureState()
+    private void OnPlayerDied()
     {
-        if (_player.Score > _HighScore)
-        {
-            Debug.Log($"New high score:{_player.Score}");
-            GameManager.HighScore = _player.Score;
-            return _player.Score;
-        }
-        return _HighScore;
-    }
-
-    public void RestoreState(object state)
-    {
-        _HighScore = (int)state;
-        Debug.Log($"Current high score:{_HighScore}");
+        _scoreLabel.text = _PlayerScore.Value.ToString();
+        enabled = false;
     }
 }

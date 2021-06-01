@@ -1,21 +1,17 @@
-using System.IO;
 using TMPro;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISaveable
 {
 
-    [SerializeField] ObstacleGenerator generator;
-    [SerializeField] GameObject DedUI;
-    [SerializeField] TextMeshProUGUI score_Text;
     [SerializeField] private SpriteRenderer _PlayerImage;
-    int _score;
+    [SerializeField] private VoidEvent _OnPlayerDead;
+    [SerializeField] private IntVariable _PlayerScoreReference;
     Transform _previousHitTransform;
-    public int Score => _score;
-    public bool IsDead { get; private set; }
 
     void Awake()
     {
+        _PlayerScoreReference.Value = 0;
         if (MainMenu.HeadSprite != null)
         {
             _PlayerImage.sprite = MainMenu.HeadSprite;
@@ -30,14 +26,26 @@ public class Player : MonoBehaviour
         if (raycast_hit.transform.gameObject.CompareTag("Obstacle"))
         {
             _previousHitTransform = raycast_hit.transform;
-            _score++;
+            _PlayerScoreReference.Value++;
         }
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        GetComponent<PlayerMovement>().enabled = false;
-        score_Text.text = $"Score: {_score}";
-        DedUI.SetActive(true);
+        _OnPlayerDead.Event?.Invoke();
+    }
+
+    public object CaptureState()
+    {
+        if (GameManager.HighScore < _PlayerScoreReference.Value)
+        {
+            return _PlayerScoreReference.Value;
+        }
+        return GameManager.HighScore;
+    }
+
+    public void RestoreState(object state)
+    {
+        //Future use
     }
 }
