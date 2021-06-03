@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24e86a516b83e774db49146766403985, type: 3}
-  m_Name: OnPlayerDeadVoidEvents
+  m_Name: OnPlayerDeadVoidEventsChannel
   m_EditorClassIdentifier: 
