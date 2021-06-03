@@ -1,13 +1,15 @@
 using TMPro;
 using UnityEngine;
 
-public class Player : MonoBehaviour, ISaveable
+public class Player : MonoBehaviour, IKeyable
 {
 
     [SerializeField] private SpriteRenderer _PlayerImage;
     [SerializeField] private VoidEvent _OnPlayerDead;
     [SerializeField] private IntVariable _PlayerScoreReference;
     Transform _previousHitTransform;
+    [SerializeField] private string _key;
+    public string Key { get => _key; set => throw new System.NotImplementedException(); }
 
     void Awake()
     {

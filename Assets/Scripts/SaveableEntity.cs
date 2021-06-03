@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SaveableEntity : MonoBehaviour
 {
+    public IKeyable Keyable;
     [SerializeField] private string id;
     public string Id => id;
 
@@ -17,6 +18,7 @@ public class SaveableEntity : MonoBehaviour
         {
             state[saveable.GetType().ToString()] = saveable.CaptureState();
         }
+        Debug.Log(state.Count);
         return state;
     }
 
@@ -33,6 +35,10 @@ public class SaveableEntity : MonoBehaviour
 public interface ISaveable
 {
     object CaptureState();
-
     void RestoreState(object state);
+}
+
+public interface IKeyable : ISaveable
+{
+    public string Key { get; set; }
 }

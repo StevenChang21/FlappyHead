@@ -10,14 +10,12 @@ public class DedPopupPanel : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Yay");
         _ListenerOnPlayerDead.Event.AddListener(OnPlayerDied);
         gameObject.SetActive(false);
     }
 
     private void OnPlayerDied()
     {
-        Debug.Log("HI");
         _ScoreLabel.text = $"Score: {_PlayerScore.Value}";
         gameObject.SetActive(true);
     }
