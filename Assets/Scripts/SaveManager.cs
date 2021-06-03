@@ -20,6 +20,25 @@ public class SaveManager : MonoBehaviour
         RestoreState(state);
     }
 
+    // public static void LoadWithKey(string key)
+    // {
+    //     var state = LoadFile();
+    //     foreach (var saveable in FindObjectsOfType<SaveableEntity>())
+    //     {
+    //         foreach (var data in saveable.Keyables)
+    //         {
+    //             if (key == data.Key.Key)
+    //             {
+    //                 if (!state.TryGetValue(key, out object value))
+    //                 {
+    //                     Debug.Log("No data");
+    //                 }
+    //                 saveable.Keyables[data.Key] = value;
+    //             }
+    //         }
+    //     }
+    // }
+
     private static void SaveFile(object state)
     {
         using (var stream = File.Open(_savePath, FileMode.Create))
@@ -48,9 +67,14 @@ public class SaveManager : MonoBehaviour
     {
         foreach (var saveable in FindObjectsOfType<SaveableEntity>())
         {
-            if (state.TryGetValue(saveable.Id, out object value))
+            foreach (var keyable in saveable.GetComponents<IKeyable>())
             {
-                saveable.RestoreState(value);
+                if (!state.TryGetValue(keyable.Key, out var value))
+                {
+                    Debug.Log("No data");
+                    continue;
+                }
+                keyable.RestoreState(value);
             }
         }
     }
@@ -60,7 +84,10 @@ public class SaveManager : MonoBehaviour
         var all_saveable_entity = FindObjectsOfType<SaveableEntity>();
         foreach (var saveable in all_saveable_entity)
         {
-            state[saveable.Id] = saveable.CaptureState();
+            foreach (var keyable in saveable.GetComponents<IKeyable>())
+            {
+                state[keyable.Key] = keyable.CaptureState();
+            }
         }
     }
 }

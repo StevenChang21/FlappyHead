@@ -9,15 +9,22 @@ public class Player : MonoBehaviour, IKeyable
     [SerializeField] private IntVariable _PlayerScoreReference;
     Transform _previousHitTransform;
     [SerializeField] private string _key;
-    public string Key { get => _key; set => throw new System.NotImplementedException(); }
+    private int _score;
+    public string Key { get => _key; set => _key = value; }
 
     void Awake()
     {
         _PlayerScoreReference.Value = 0;
+        _OnPlayerDead.Event.AddListener(OnPlayerDead);
         if (MainMenu.HeadSprite != null)
         {
             _PlayerImage.sprite = MainMenu.HeadSprite;
         }
+    }
+
+    void Start()
+    {
+        SaveManager.Load();
     }
 
     void Update()
@@ -37,17 +44,22 @@ public class Player : MonoBehaviour, IKeyable
         _OnPlayerDead.Event?.Invoke();
     }
 
+    void OnPlayerDead()
+    {
+        SaveManager.Save();
+    }
+
     public object CaptureState()
     {
-        if (GameManager.HighScore < _PlayerScoreReference.Value)
+        if (_score < _PlayerScoreReference.Value)
         {
             return _PlayerScoreReference.Value;
         }
-        return GameManager.HighScore;
+        return _score;
     }
 
     public void RestoreState(object state)
     {
-        //Future use
+        _score = (int)state;
     }
 }

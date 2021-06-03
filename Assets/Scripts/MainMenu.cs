@@ -14,7 +14,6 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         MainMenu.HeadSprite = _HeadImage.sprite;
-        _HighScoreLabel.text = $"High Score:{GameManager.HighScore}";
     }
 
     public void OnClickPlay()

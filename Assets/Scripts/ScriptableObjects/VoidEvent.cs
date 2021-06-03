@@ -4,18 +4,13 @@ using UnityEngine.Events;
 [CreateAssetMenu(menuName = "Events/VoidEvents", fileName = "NewVoidEvents")]
 public class VoidEvent : ScriptableObject
 {
-    private UnityEvent @event;
+    public UnityEvent Event { get; set; }
 
-    public UnityEvent Event
+    void Awake()
     {
-        get
+        if (Event == null)
         {
-            if (@event == null)
-            {
-                return new UnityEvent();
-            }
-            return @event;
+            Event = new UnityEvent();
         }
-        set => @event = value;
     }
 }

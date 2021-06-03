@@ -17029,7 +17029,7 @@ MonoBehaviour:
   _PlayerImage: {fileID: 1944796528}
   _OnPlayerDead: {fileID: 11400000, guid: e8dcd0199ac360048bbf98a0688f922e, type: 2}
   _PlayerScoreReference: {fileID: 11400000, guid: bf3daf3744136794d9a9b737e1be75b8, type: 2}
-  _key: 
+  _key: HighScore
 --- !u!114 &2064316648
 MonoBehaviour:
   m_ObjectHideFlags: 0
