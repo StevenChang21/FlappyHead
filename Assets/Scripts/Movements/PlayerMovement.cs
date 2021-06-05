@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (_Movement == null) { return; }
         velocity = _Movement.Move(Input.GetKey(KeyCode.Space), velocity);
         transform.Translate(velocity * Time.deltaTime, Space.World);
         float rot;
@@ -35,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnPlayerDied()
     {
-        enabled = false;
+        _Movement = null;
+        GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
     }
 }

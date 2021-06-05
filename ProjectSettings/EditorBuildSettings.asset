@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: e37838aaa92fba943a82fdd998370419
+  - enabled: 1
+    path: Assets/Scenes/CharacterSwitchingSiteScene.unity
+    guid: 025223f037baa244fb922e1429a15510
   m_configObjects: {}

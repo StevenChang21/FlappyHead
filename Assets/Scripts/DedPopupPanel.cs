@@ -11,22 +11,30 @@ public class DedPopupPanel : MonoBehaviour
     void Start()
     {
         _ListenerOnPlayerDead.Event.AddListener(OnPlayerDied);
-        gameObject.SetActive(false);
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 
     private void OnPlayerDied()
     {
         _ScoreLabel.text = $"Score: {_PlayerScore.Value}";
-        gameObject.SetActive(true);
+        transform.GetChild(0).gameObject.SetActive(true);
     }
 
     public void OnClickPlayAgain()
     {
-        SceneManager.LoadScene(1);
+        Time.timeScale = 1f;
+        StartCoroutine(WaitUIEffectsEnd(() => SceneManager.LoadScene(1), 0.5f));
     }
 
     public void OnClickHome()
     {
-        SceneManager.LoadScene(0);
+        Time.timeScale = 1f;
+        StartCoroutine(WaitUIEffectsEnd(() => SceneManager.LoadScene(0), 0.5f));
+    }
+
+    System.Collections.IEnumerator WaitUIEffectsEnd(System.Action action, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        action.Invoke();
     }
 }
