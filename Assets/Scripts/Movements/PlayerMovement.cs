@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         if (_Movement == null) { return; }
-        velocity = _Movement.Move(Input.GetKey(KeyCode.Space), velocity);
+        velocity = _Movement.Move(Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W), Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow), velocity);
         transform.Translate(velocity * Time.deltaTime, Space.World);
         float rot;
         if (velocity.y < 0)

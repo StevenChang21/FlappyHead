@@ -1,34 +1,38 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class LeanTweenMaster : MonoBehaviour
 {
+    [SerializeField] private GameObject[] _DisableUI;
+    [SerializeField] private GameObject[] _EnableUI;
     [SerializeField] private LeanTweenType _LeanTweenType = LeanTweenType.notUsed;
     [SerializeField] private float _Duration = .5f;
+
     [SerializeField]
     private bool _PlayOnEnable, _PlayOnDisable;
-
-    void OnEnable()
-    {
-        if (!_PlayOnEnable) { return; }
-        transform.localScale = Vector3.zero;
-        LeanTween.scale(gameObject, Vector3.one, _Duration).setEase(_LeanTweenType);
-    }
 
     public void PlayOnDisable()
     {
         if (!_PlayOnDisable) { return; }
-        LeanTween.scale(gameObject, Vector3.zero, _Duration).setEase(_LeanTweenType).setOnComplete(() => gameObject.SetActive(false));
+        foreach (var ui in _DisableUI)
+        {
+            if (TryGetComponent(out Button button))
+            {
+                button.interactable = false;
+            }
+            LeanTween.scale(ui, Vector3.zero, _Duration).setEase(_LeanTweenType).setOnComplete(() => ui.SetActive(false));
+        }
     }
 
-    public void PlayOnDisableWithAction(UnityEvent action)
+    public void PlayOnEnable()
     {
-        if (!_PlayOnDisable) { return; }
-        LeanTween.scale(gameObject, Vector3.zero, _Duration).setEase(_LeanTweenType).setOnComplete(() =>
+        if (!_PlayOnEnable) { return; }
+        foreach (var ui in _EnableUI)
         {
-            gameObject.SetActive(false);
-            action?.Invoke();
+            ui.SetActive(true);
+            ui.transform.localScale = Vector3.zero;
+            LeanTween.scale(ui, Vector3.one, _Duration).setEase(_LeanTweenType);
         }
-        );
     }
 }

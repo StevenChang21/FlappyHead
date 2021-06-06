@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BackgroundMovingEffect : MonoBehaviour
 {
-    [SerializeField] private float _MovingSpeed;
-    private float _offset;
+    [SerializeField] private Vector2 _MovingVelocity;
+    private Vector2 _offset;
     private Material _Mat;
 
     void Start()
@@ -13,7 +13,7 @@ public class BackgroundMovingEffect : MonoBehaviour
 
     void Update()
     {
-        _offset += (Time.deltaTime * _MovingSpeed) / 10f;
-        _Mat.SetTextureOffset("_MainTex", new Vector2(_offset, 0));
+        _offset += (Time.deltaTime * _MovingVelocity) / 10f;
+        _Mat.SetTextureOffset("_MainTex", _offset);
     }
 }

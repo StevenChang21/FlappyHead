@@ -32,10 +32,10 @@ public class AudioManager : MonoBehaviour
 
     private int GetAudioClipIndex()
     {
-        var new_index = Random.Range(0, _AudioClips.Length - 1);
+        var new_index = Random.Range(0, _AudioClips.Length);
         while (_previousIndex == new_index)
         {
-            new_index = Random.Range(0, _AudioClips.Length - 1);
+            new_index = Random.Range(0, _AudioClips.Length);
         }
         _previousIndex = new_index;
         return new_index;
