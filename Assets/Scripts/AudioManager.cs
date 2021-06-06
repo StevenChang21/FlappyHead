@@ -7,6 +7,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource _AudioSource;
     private int _previousIndex = 0;
 
+    public AudioSource AudioSource => _AudioSource;
+
     void Start()
     {
         DontDestroyOnLoad(this);

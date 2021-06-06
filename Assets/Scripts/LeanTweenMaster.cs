@@ -17,7 +17,7 @@ public class LeanTweenMaster : MonoBehaviour
         if (!_PlayOnDisable) { return; }
         foreach (var ui in _DisableUI)
         {
-            if (TryGetComponent(out Button button))
+            if (ui.TryGetComponent(out Button button))
             {
                 button.interactable = false;
             }
@@ -32,7 +32,13 @@ public class LeanTweenMaster : MonoBehaviour
         {
             ui.SetActive(true);
             ui.transform.localScale = Vector3.zero;
-            LeanTween.scale(ui, Vector3.one, _Duration).setEase(_LeanTweenType);
+            LeanTween.scale(ui, Vector3.one, _Duration).setEase(_LeanTweenType).setOnComplete(() =>
+            {
+                if (ui.TryGetComponent(out Button button))
+                {
+                    button.interactable = true;
+                }
+            });
         }
     }
 }
